@@ -4,17 +4,19 @@ from PyQt5 import uic
 from PyQt5.QtTest import QTest
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QTableWidgetItem, QComboBox, \
     QTextEdit, QPlainTextEdit
+from main_ui import Ui_MainWindow
+from addEditCoffeeForm import Ui_Form
 
 
-class MyWidget(QMainWindow):
+class MyWidget(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('main.ui', self)
-        self.loadTable("coffee.db")
+        self.setupUi(self)
+        self.loadTable("data/coffee.db")
         self.pushButton.clicked.connect(self.edit)
 
     def edit(self):
-        self.edit = EditWidget("coffee.db", self)
+        self.edit = EditWidget("data/coffee.db", self)
         self.edit.show()
 
     def loadTable(self, db):
@@ -36,11 +38,11 @@ class MyWidget(QMainWindow):
         self.tableWidget.resizeColumnsToContents()
 
 
-class EditWidget(QWidget):
+class EditWidget(QWidget, Ui_Form):
 
     def __init__(self, db, parent):
         super().__init__()
-        uic.loadUi('addEditCoffeeForm.ui', self)
+        self.setupUi(self)
         self.db_name = db
         self.db = sqlite3.connect(db)
         cur = self.db.cursor()
